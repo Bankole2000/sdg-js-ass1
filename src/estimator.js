@@ -28,8 +28,8 @@ const covid19ImpactEstimator = (data) => {
   impact.dollarsInFight = impact.infectionsByRequestedTime * income * population * days;
   severeImpact.dollarsInFight = severeInfectionsByRequestedTime * income * population * days;
   return {
-    data, 
-    impact, 
+    data,
+    impact,
     severeImpact
   };
 };
