@@ -50,6 +50,7 @@ const covid19ImpactEstimator = (data) => {
   const estimate = eCurrentlyInfected(data);
   const { impact } = estimate;
   const { severeImpact } = estimate;
+
   impact.infectionsByRequestedTime = eProjectedInfections(data, impact);
   severeImpact.infectionsByRequestedTime = eProjectedInfections(data, severeImpact);
 
@@ -59,8 +60,9 @@ const covid19ImpactEstimator = (data) => {
   impact.hospitalBedsByRequestedTime = eAvailableBeds(data, impact);
   severeImpact.hospitalBedsByRequestedTime = eAvailableBeds(data, severeImpact);
 
-  impact.casesForICUByRequestedTime = 0.05 * impact.infectionsByRequestedTime;
-  severeImpact.casesForICUByRequestedTime = 0.05 * severeImpact.infectionsByRequestedTime;
+  impact.casesForICUByRequestedTime = Math.trunc(0.05 * impact.infectionsByRequestedTime);
+  const sevInfsByReqTime = severeImpact.infectionsByRequestedTime;
+  severeImpact.casesForICUByRequestedTime = Math.trunc(0.05 * sevInfsByReqTime);
 
   impact.casesForVentilatorsByRequestedTime = 0.02 * impact.infectionsByRequestedTime;
   severeImpact.casesForVentilatorsByRequestedTime = 0.02 * impact.infectionsByRequestedTime;
