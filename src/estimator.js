@@ -54,18 +54,20 @@ const covid19ImpactEstimator = (data) => {
   impact.infectionsByRequestedTime = eProjectedInfections(data, impact);
   severeImpact.infectionsByRequestedTime = eProjectedInfections(data, severeImpact);
 
-  impact.severeCasesByRequestedTime = 0.15 * impact.infectionsByRequestedTime;
-  severeImpact.severeCasesByRequestedTime = 0.15 * severeImpact.infectionsByRequestedTime;
+  const impInfsByReqTime = impact.infectionsByRequestedTime;
+  const sevInfsByReqTime = severeImpact.infectionsByRequestedTime;
+
+  impact.severeCasesByRequestedTime = Math.trunc(0.15 * impInfsByReqTime);
+  severeImpact.severeCasesByRequestedTime = Math.trunc(0.15 * sevInfsByReqTime);
 
   impact.hospitalBedsByRequestedTime = eAvailableBeds(data, impact);
   severeImpact.hospitalBedsByRequestedTime = eAvailableBeds(data, severeImpact);
 
-  impact.casesForICUByRequestedTime = Math.trunc(0.05 * impact.infectionsByRequestedTime);
-  const sevInfsByReqTime = severeImpact.infectionsByRequestedTime;
+  impact.casesForICUByRequestedTime = Math.trunc(0.05 * impInfsByReqTime);
   severeImpact.casesForICUByRequestedTime = Math.trunc(0.05 * sevInfsByReqTime);
 
-  impact.casesForVentilatorsByRequestedTime = 0.02 * impact.infectionsByRequestedTime;
-  severeImpact.casesForVentilatorsByRequestedTime = 0.02 * impact.infectionsByRequestedTime;
+  impact.casesForVentilatorsByRequestedTime = Math.trunc(0.02 * impInfsByReqTime);
+  severeImpact.casesForVentilatorsByRequestedTime = Math.trunc(0.02 * sevInfsByReqTime);
 
   impact.dollarsInFlight = eDollarsInFlight(impact, data);
   severeImpact.dollarsInFlight = eDollarsInFlight(severeImpact, data);
