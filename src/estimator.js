@@ -32,7 +32,7 @@ const eProjectedInfections = ({ periodType, timeToElapse }, { currentlyInfected 
 };
 
 const eAvailableBeds = ({ totalHospitalBeds }, { severeCasesByRequestedTime }) => {
-  const availableBeds = Math.floor(0.35 * totalHospitalBeds);
+  const availableBeds = Math.trunc(0.35 * totalHospitalBeds);
   const beds = availableBeds - severeCasesByRequestedTime;
   return beds;
 };
