@@ -26,13 +26,13 @@ const eCurrentlyInfected = ({ reportedCases }) => {
 
 const eProjectedInfections = ({ periodType, timeToElapse }, { currentlyInfected }) => {
   const days = normalizeDays(periodType, timeToElapse);
-  const factor = Math.trunc(days / 3);
+  const factor = Math.floor(days / 3);
   const possiblyInfected = currentlyInfected * (2 ** factor);
   return possiblyInfected;
 };
 
 const eAvailableBeds = ({ totalHospitalBeds }, { severeCasesByRequestedTime }) => {
-  const availableBeds = Math.trunc(0.35 * totalHospitalBeds);
+  const availableBeds = Math.floor(0.35 * totalHospitalBeds);
   const beds = availableBeds - severeCasesByRequestedTime;
   return beds;
 };
@@ -42,7 +42,7 @@ const eDollarsInFlight = ({ infectionsByRequestedTime }, data) => {
   const { periodType, timeToElapse } = data;
   const days = normalizeDays(periodType, timeToElapse);
   const income = infectionsByRequestedTime * avgDailyIncomeInUSD * avgDailyIncomePopulation;
-  const dollarsInFlight = Math.trunc(income / days);
+  const dollarsInFlight = Math.floor(income / days);
   return dollarsInFlight;
 };
 
@@ -57,17 +57,17 @@ const covid19ImpactEstimator = (data) => {
   const impInfsByReqTime = impact.infectionsByRequestedTime;
   const sevInfsByReqTime = severeImpact.infectionsByRequestedTime;
 
-  impact.severeCasesByRequestedTime = Math.trunc(0.15 * impInfsByReqTime);
-  severeImpact.severeCasesByRequestedTime = Math.trunc(0.15 * sevInfsByReqTime);
+  impact.severeCasesByRequestedTime = Math.floor(0.15 * impInfsByReqTime);
+  severeImpact.severeCasesByRequestedTime = Math.floor(0.15 * sevInfsByReqTime);
 
   impact.hospitalBedsByRequestedTime = eAvailableBeds(data, impact);
   severeImpact.hospitalBedsByRequestedTime = eAvailableBeds(data, severeImpact);
 
-  impact.casesForICUByRequestedTime = Math.trunc(0.05 * impInfsByReqTime);
-  severeImpact.casesForICUByRequestedTime = Math.trunc(0.05 * sevInfsByReqTime);
+  impact.casesForICUByRequestedTime = Math.floor(0.05 * impInfsByReqTime);
+  severeImpact.casesForICUByRequestedTime = Math.floor(0.05 * sevInfsByReqTime);
 
-  impact.casesForVentilatorsByRequestedTime = Math.trunc(0.02 * impInfsByReqTime);
-  severeImpact.casesForVentilatorsByRequestedTime = Math.trunc(0.02 * sevInfsByReqTime);
+  impact.casesForVentilatorsByRequestedTime = Math.floor(0.02 * impInfsByReqTime);
+  severeImpact.casesForVentilatorsByRequestedTime = Math.floor(0.02 * sevInfsByReqTime);
 
   impact.dollarsInFlight = eDollarsInFlight(impact, data);
   severeImpact.dollarsInFlight = eDollarsInFlight(severeImpact, data);
